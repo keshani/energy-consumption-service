@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="insert-sample-data" author="keshani">
+
+        <sql>
+            INSERT INTO ROLES (ROLE_NAME) VALUES ('ROLE_USER');
+            INSERT INTO ROLES (ROLE_NAME) VALUES ('ROLE_ADMIN');
+
+            <!-- password: pass123 -->
+            INSERT INTO CUSTOMERS (USERNAME, FIRST_NAME, LAST_NAME, PASSWORD)
+            VALUES ('john.doe', 'John', 'Doe', '$2a$10$j1MfOm3mrOmcKg3mvtkkNeV8DmrS.hEdhzHV8Md7XGyhiCTIv4/Ku');
+
+            <!-- password: admin456 -->
+            INSERT INTO CUSTOMERS (USERNAME, FIRST_NAME, LAST_NAME, PASSWORD)
+            VALUES ('jane.smith', 'Jane', 'Smith', '$2a$10$/.dfsw.AjOLLOXUw5QNFAeeGuW4.Bq1mzM3lWRKxVkyJ9QCbESuue');
+
+            INSERT INTO CUSTOMERS_ROLES (USER_ID, ROLE_ID) VALUES (1, 1);
+            INSERT INTO CUSTOMERS_ROLES (USER_ID, ROLE_ID) VALUES (2, 2);
+
+            INSERT INTO METERING_POINTS (USER_ID, ADDRESS) VALUES (1, '123 Main St');
+            INSERT INTO METERING_POINTS (USER_ID, ADDRESS) VALUES (2, '456 Oak Ave');
+            INSERT INTO METERING_POINTS (USER_ID, ADDRESS) VALUES (2, '789 Maple Dr');
+            INSERT INTO METERING_POINTS (USER_ID, ADDRESS) VALUES (2, '101 Pine Blvd');
+
+            <!-- Metering Point 1 and User john.doe -->
+            INSERT INTO CONSUMPTION (AMOUNT, AMOUNT_UNIT, CONSUMPTION_TIME, METERING_POINT_ID)
+            VALUES (100, 'kWh', '2025-06-01T10:00:00+00:00', 1);
+
+            INSERT INTO CONSUMPTION (AMOUNT, AMOUNT_UNIT, CONSUMPTION_TIME, METERING_POINT_ID)
+            VALUES (2.34, 'MWh', '2025-05-01T10:00:00+00:00', 1);
+
+            INSERT INTO CONSUMPTION (AMOUNT, AMOUNT_UNIT, CONSUMPTION_TIME, METERING_POINT_ID)
+            VALUES (123.34, 'kWh', '2025-05-01T10:00:00+00:00', 1);
+
+            INSERT INTO CONSUMPTION (AMOUNT, AMOUNT_UNIT, CONSUMPTION_TIME, METERING_POINT_ID)
+            VALUES (12.34456, 'kWh', '2025-04-01T10:00:00+00:00', 1);
+
+            <!-- Metering Point 2, 3, 4 and User jane.smith-->
+
+            INSERT INTO CONSUMPTION (AMOUNT, AMOUNT_UNIT, CONSUMPTION_TIME, METERING_POINT_ID)
+            VALUES (200, 'kWh', '2025-06-02T11:00:00+00:00', 2);
+
+            INSERT INTO CONSUMPTION (AMOUNT, AMOUNT_UNIT, CONSUMPTION_TIME, METERING_POINT_ID)
+            VALUES (88, 'kWh', '2025-06-03T14:00:00+00:00', 3);
+
+            INSERT INTO CONSUMPTION (AMOUNT, AMOUNT_UNIT, CONSUMPTION_TIME, METERING_POINT_ID)
+            VALUES (73, 'kWh', '2025-06-04T08:30:00+00:00', 4);
+        </sql>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,22 @@
+version: '3.1'
+services:
+  app:
+    build: .
+    container_name: app
+    ports:
+      - 9093:9093
+    depends_on:
+      - postgresqldb
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresqldb:5432/db_enefit
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=energypass
+  postgresqldb:
+    image: postgres:13.1-alpine
+    container_name: postgresqldb
+    ports:
+      - 5436:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=energypass
+      - POSTGRES_DB=db_enefit

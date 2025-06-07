@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <!-- Create CUSTOMERS table -->
+    <changeSet id="create_customer_table" author="keshani">
+        <createTable tableName="CUSTOMERS">
+            <column name="USER_ID" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" unique="true"/>
+            </column>
+            <column name="USERNAME" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="FIRST_NAME" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="LAST_NAME" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PASSWORD" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="create_roles_table" author="Keshani">
+        <createTable tableName="ROLES">
+            <column name="ROLE_ID" type="INT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="ROLE_NAME" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="create-metering-points-table" author="yourname">
+        <createTable tableName="METERING_POINTS">
+            <column name="METERING_POINT_ID" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="USER_ID" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="ADDRESS" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="METERING_POINTS"
+                                 baseColumnNames="USER_ID"
+                                 constraintName="FK_METERINGPOINT_USER"
+                                 referencedTableName="CUSTOMERS"
+                                 referencedColumnNames="USER_ID"/>
+    </changeSet>
+    <!-- Create CUSTOMERS_ROLES join table -->
+    <changeSet id="create_user_role_table" author="keshani">
+        <createTable tableName="CUSTOMERS_ROLES">
+            <column name="USER_ID" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ROLE_ID" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey tableName="CUSTOMERS_ROLES"
+                       columnNames="USER_ID, ROLE_ID"
+                       constraintName="PK_CUSTOMERS_ROLES"/>
+
+        <addForeignKeyConstraint baseTableName="CUSTOMERS_ROLES"
+                                 baseColumnNames="USER_ID"
+                                 constraintName="FK_CUSTOMERS_ROLES_USER"
+                                 referencedTableName="CUSTOMERS"
+                                 referencedColumnNames="USER_ID"/>
+
+        <addForeignKeyConstraint baseTableName="CUSTOMERS_ROLES"
+                                 baseColumnNames="ROLE_ID"
+                                 constraintName="FK_CUSTOMERS_ROLES_ROLE"
+                                 referencedTableName="ROLES"
+                                 referencedColumnNames="ROLE_ID"/>
+    </changeSet>
+    <changeSet id="create-consumption-table" author="keshani">
+        <createTable tableName="CONSUMPTION">
+            <column name="CONSUMPTION_ID" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="AMOUNT" type="NUMERIC">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="AMOUNT_UNIT" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="CONSUMPTION_TIME" type="TIMESTAMP WITH TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="METERING_POINT_ID" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="CONSUMPTION"
+                                 baseColumnNames="METERING_POINT_ID"
+                                 constraintName="FK_CONSUMPTION_METERING_POINTS"
+                                 referencedTableName="METERING_POINTS"
+                                 referencedColumnNames="METERING_POINT_ID"/>
+    </changeSet>
+</databaseChangeLog>
