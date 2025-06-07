@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.enefit.energyconsumption.common.exception.PriceNotAvailableForRangeException;
 import com.enefit.energyconsumption.config.MarketPriceConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -26,7 +27,7 @@ public class CachedMarketPriceHandler implements MarketPriceHandler {
 
     public CachedMarketPriceHandler(final WebClient.Builder webClientBuilder, final MarketPriceConfig config) {
         this.config = config;
-         this.webClient = webClientBuilder
+        webClient = webClientBuilder
                 .baseUrl(this.config.getBaseUrl())
                 .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
                 .build();
@@ -89,10 +90,10 @@ public class CachedMarketPriceHandler implements MarketPriceHandler {
                    .bodyToFlux(ElectricityPrice.class)
                    .collectList().block();
            if (prices == null || prices.isEmpty()) {
-               throw new RuntimeException("Price not available for date: " + startDate);
+               throw new PriceNotAvailableForRangeException( startDate, endDate);
            }
            return prices;
-       }  catch (Exception e) {
+       } catch (Exception e) {
            throw new RuntimeException(
                    String.format("Market price API call failed for range %s to %s", startDate, endDate), e);
 
