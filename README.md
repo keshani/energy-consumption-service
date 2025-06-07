@@ -1,6 +1,6 @@
 # 🔋 Enefit Energy Consumption Service
 
-This is a Spring Boot-based microservice for tracking and calculating users' monthly electricity consumption and related costs. 
+This is a Spring Boot-based service calculating users' monthly electricity consumption and related costs. 
 The application integrates with a public market price API to calculate cost per kWh and uses JWT-based security for user authentication.
 
 ---

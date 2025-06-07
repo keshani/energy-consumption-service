@@ -84,8 +84,6 @@ class ConsumptionServiceTest {
         assertThrows(IllegalArgumentException.class, () -> consumptionService.getMonthlyConsumptions(1L, null));
     }
 
-
-
     private List<Consumption> getTestConsumptionList() {
 
         // Arrange
